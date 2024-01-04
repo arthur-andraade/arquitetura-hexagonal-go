@@ -1,6 +1,10 @@
 package application
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 const (
 	DISABLED = "DISABLED"
@@ -11,6 +15,10 @@ type ProductInterface interface {
 	IsValid() (bool, error)
 	Enable() error
 	Disable() error
+	GetID() string
+	GetName() string
+	GetPrice() float64
+	GetStatus() string
 }
 
 type Product struct {
@@ -18,6 +26,29 @@ type Product struct {
 	Name   string
 	Price  float64
 	Status string
+}
+
+func NewProduct() *Product {
+	return &Product{
+		ID:     uuid.New().String(),
+		Status: DISABLED,
+	}
+}
+
+func (p *Product) GetID() string {
+	return p.ID
+}
+
+func (p *Product) GetName() string {
+	return p.Name
+}
+
+func (p *Product) GetPrice() float64 {
+	return p.Price
+}
+
+func (p *Product) GetStatus() string {
+	return p.Status
 }
 
 func (p *Product) IsValid() (bool, error) {

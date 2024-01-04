@@ -74,6 +74,15 @@ func TestProduct_Disable_mustChangeStatusToDisabled_whenCallFunction(t *testing.
 	require.Equal(t, application.DISABLED, product.Status)
 }
 
+func TestNewProduct_mustCreateNewProduct(t *testing.T) {
+
+	product := application.NewProduct()
+
+	require.NotNil(t, product.GetID())
+	require.Equal(t, application.DISABLED, product.GetStatus())
+
+}
+
 func productMock() application.Product {
 	product := application.Product{
 		ID:     "141",
