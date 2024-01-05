@@ -111,3 +111,139 @@ func TestProductService_Create(t *testing.T) {
 
 	defer controlador.Finish()
 }
+
+func TestProductService_Enable(t *testing.T) {
+
+	controlador := gomock.NewController(t)
+
+	t.Run("Enable the product and save it", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Enable().Return(nil).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Return(productInterfaceMock, nil).AnyTimes()
+
+		_, err := service.Enable(productInterfaceMock)
+
+		require.Nil(t, err)
+
+	})
+
+	t.Run("Enable the product but happen error to save it", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Enable().Return(nil).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Return(nil, errors.New("Erro")).AnyTimes()
+
+		_, err := service.Enable(productInterfaceMock)
+
+		require.NotNil(t, err)
+
+	})
+
+	t.Run("Happen error when try enable the product", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Enable().Return(errors.New("Erro")).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Times(0)
+
+		_, err := service.Enable(productInterfaceMock)
+
+		require.NotNil(t, err)
+
+	})
+
+	defer controlador.Finish()
+
+}
+
+func TestProductService_Disable(t *testing.T) {
+
+	controlador := gomock.NewController(t)
+
+	t.Run("Disable the product and save it", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Disable().Return(nil).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Return(productInterfaceMock, nil).AnyTimes()
+
+		_, err := service.Disable(productInterfaceMock)
+
+		require.Nil(t, err)
+
+	})
+
+	t.Run("Disable the product but happen error to save it", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Disable().Return(nil).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Return(nil, errors.New("Erro")).AnyTimes()
+
+		_, err := service.Disable(productInterfaceMock)
+
+		require.NotNil(t, err)
+
+	})
+
+	t.Run("Happen error when try disable the product", func(t *testing.T) {
+
+		persistenceMock := mock_application.NewMockProductPersistenceInterface(controlador)
+
+		productInterfaceMock := mock_application.NewMockProductInterface(controlador)
+
+		productInterfaceMock.EXPECT().Disable().Return(errors.New("Erro")).AnyTimes()
+
+		service := application.ProductService{
+			Persistence: persistenceMock,
+		}
+
+		persistenceMock.EXPECT().Save(gomock.Any()).Times(0)
+
+		_, err := service.Disable(productInterfaceMock)
+
+		require.NotNil(t, err)
+
+	})
+
+	defer controlador.Finish()
+
+}
