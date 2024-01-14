@@ -34,18 +34,11 @@ func Run(service application.ProductServiceInterface, action string, productId s
 			return result, err
 		}
 
-		product, err = service.Enable(product)
+		result, err = alterStatusProduct(product, service.Enable)
 
 		if err != nil {
 			return result, err
 		}
-
-		result = fmt.Sprintf(
-			"Product ID %s with the name %s has been changed the status to %s",
-			product.GetID(),
-			product.GetName(),
-			product.GetStatus(),
-		)
 
 	case "disable":
 		product, err := service.Get(productId)
@@ -54,18 +47,11 @@ func Run(service application.ProductServiceInterface, action string, productId s
 			return result, err
 		}
 
-		product, err = service.Disable(product)
+		result, err = alterStatusProduct(product, service.Disable)
 
 		if err != nil {
 			return result, err
 		}
-
-		result = fmt.Sprintf(
-			"Product ID %s with the name %s has been changed the status to %s",
-			product.GetID(),
-			product.GetName(),
-			product.GetStatus(),
-		)
 
 	default:
 
@@ -84,6 +70,26 @@ func Run(service application.ProductServiceInterface, action string, productId s
 		)
 
 	}
+
+	return result, nil
+}
+
+func alterStatusProduct(product application.ProductInterface, functionToAlter func(application.ProductInterface) (application.ProductInterface, error)) (string, error) {
+
+	var result = ""
+
+	productStatusChanged, err := functionToAlter(product)
+
+	if err != nil {
+		return result, err
+	}
+
+	result = fmt.Sprintf(
+		"Product ID %s with the name %s has been changed the status to %s",
+		productStatusChanged.GetID(),
+		productStatusChanged.GetName(),
+		productStatusChanged.GetStatus(),
+	)
 
 	return result, nil
 }
