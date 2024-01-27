@@ -3,6 +3,10 @@ FROM golang:1.21
 WORKDIR /go/src
 ENV PATH="/go/bin:${PATH}"
 
+COPY . .
+
+RUN go mod download
+
 RUN apt-get update && apt-get install sqlite3 -y
 
 RUN usermod -u 1000 www-data
